@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Plus, FolderKanban, Trash2 } from "lucide-react";
 import { getProjects, createProject, deleteProject, Project } from "@/lib/api";
 import { useApp } from "@/components/AppContext";
+import Spinner from "@/components/Spinner";
 import { format } from "date-fns";
 
 export default function ProjectsPage() {
@@ -72,7 +73,7 @@ export default function ProjectsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading projects...</div>
+        <Spinner size="lg" />
       </div>
     );
   }

@@ -26,6 +26,7 @@ import {
 import { useApp } from "@/components/AppContext";
 import ProjectTaskItem from "@/components/ProjectTaskItem";
 import TaskForm from "@/components/TaskForm";
+import Spinner from "@/components/Spinner";
 
 const URGENCY_ORDER = ["Urgent", "High", "Medium", "Low", "Least Urgent"] as const;
 
@@ -216,7 +217,7 @@ export default function ProjectDetailPage({
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading project...</div>
+        <Spinner size="lg" />
       </div>
     );
   }

@@ -3,8 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Plus, Trash2, Users as UsersIcon, Eye } from "lucide-react";
-import { createTeamMember, deleteTeamMember } from "@/lib/api";
 import { useApp } from "@/components/AppContext";
+import { getSupabase } from "@/lib/supabase";
+import Spinner from "@/components/Spinner";
 
 const PRESET_COLORS = [
   "#EF4444", "#F97316", "#F59E0B", "#84CC16", "#10B981", "#14B8A6",
@@ -12,7 +13,7 @@ const PRESET_COLORS = [
 ];
 
 export default function TeamPage() {
-  const { teamMembers, refreshTeamMembers } = useApp();
+  const { teamMembers, teamLoading, refreshTeamMembers } = useApp();
   const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState("");
   const [selectedColor, setSelectedColor] = useState(PRESET_COLORS[0]);
@@ -21,7 +22,12 @@ export default function TeamPage() {
     e.preventDefault();
     if (!name.trim()) return;
     try {
-      await createTeamMember(name.trim(), selectedColor);
+      const { error } = await getSupabase()
+        .from("team_members")
+        .insert({ name: name.trim(), color: selectedColor });
+
+      if (error) throw error;
+
       await refreshTeamMembers();
       setShowForm(false);
       setName("");
@@ -35,7 +41,13 @@ export default function TeamPage() {
   const handleDeleteMember = async (memberId: string) => {
     if (!confirm("Are you sure you want to remove this team member?")) return;
     try {
-      await deleteTeamMember(memberId);
+      const { error } = await getSupabase()
+        .from("team_members")
+        .delete()
+        .eq("id", memberId);
+
+      if (error) throw error;
+
       await refreshTeamMembers();
     } catch (error) {
       console.error("Failed to delete team member:", error);
@@ -136,7 +148,11 @@ export default function TeamPage() {
         </div>
       )}
 
-      {teamMembers.length === 0 ? (
+      {teamLoading ? (
+        <div className="flex justify-center py-12">
+          <Spinner size="lg" />
+        </div>
+      ) : teamMembers.length === 0 ? (
         <div className="bg-white rounded-lg border border-gray-200 p-12 text-center">
           <UsersIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-black mb-2">
