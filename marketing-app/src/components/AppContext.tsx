@@ -15,6 +15,7 @@ interface AppContextType {
   currentUser: string | null;
   setCurrentUser: (userId: string | null) => void;
   teamMembers: TeamMember[];
+  setTeamMembers: React.Dispatch<React.SetStateAction<TeamMember[]>>;
   teamLoading: boolean;
   refreshTeamMembers: () => Promise<void>;
   getUserColor: (userId: string | undefined) => string;
@@ -47,6 +48,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const members: TeamMember[] = (data ?? []).map((row) => ({
         id: row.id,
         name: row.name,
+        role: row.role ?? "",
         color: row.color,
         createdAt: row.created_at,
       }));
@@ -83,6 +85,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         currentUser,
         setCurrentUser,
         teamMembers,
+        setTeamMembers,
         teamLoading,
         refreshTeamMembers,
         getUserColor,
