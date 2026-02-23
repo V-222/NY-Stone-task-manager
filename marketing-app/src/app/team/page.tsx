@@ -47,34 +47,19 @@ export default function TeamPage() {
 
     setCreatingMember(true);
     try {
-      const { data, error } = await getSupabase()
+      const { error } = await getSupabase()
         .from("team_members")
-        .insert({ name: name.trim(), role: role.trim(), color: selectedColor })
-        .select()
-        .single();
+        .insert({ name: name.trim(), role: role.trim(), color: selectedColor });
 
       if (error) throw error;
 
-      // Optimistic: append new member locally
-      setTeamMembers((prev) => [
-        ...prev,
-        {
-          id: data.id,
-          name: data.name,
-          role: data.role ?? "",
-          color: data.color,
-          createdAt: data.created_at,
-        },
-      ]);
-
+      await refreshTeamMembers();
       setShowForm(false);
       setName("");
       setRole("");
       setSelectedColor(PRESET_COLORS[0]);
     } catch (error) {
       console.error("Failed to create team member:", error);
-      // Refresh to stay in sync after failure
-      await refreshTeamMembers();
     } finally {
       setCreatingMember(false);
     }
