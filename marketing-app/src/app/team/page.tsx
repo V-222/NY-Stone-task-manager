@@ -49,7 +49,7 @@ export default function TeamPage() {
     try {
       const { error } = await getSupabase()
         .from("team_members")
-        .insert({ name: name.trim(), role: role.trim(), color: selectedColor });
+        .insert({ name: name.trim(), color: selectedColor });
 
       if (error) throw error;
 
@@ -98,7 +98,7 @@ export default function TeamPage() {
     setTeamMembers((prev) =>
       prev.map((m) =>
         m.id === memberId
-          ? { ...m, name: editName.trim(), role: editRole.trim() }
+          ? { ...m, name: editName.trim() }
           : m
       )
     );
@@ -107,7 +107,7 @@ export default function TeamPage() {
     try {
       const { error } = await getSupabase()
         .from("team_members")
-        .update({ name: editName.trim(), role: editRole.trim() })
+        .update({ name: editName.trim() })
         .eq("id", memberId);
 
       if (error) throw error;
