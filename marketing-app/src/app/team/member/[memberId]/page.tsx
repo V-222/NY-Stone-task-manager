@@ -12,6 +12,7 @@ import {
   ProjectTask,
 } from "@/lib/api";
 import { ArrowLeft, CheckCircle2, Circle, Calendar, FolderKanban } from "lucide-react";
+import Spinner from "@/components/Spinner";
 
 export default function MemberOverviewPage({
   params,
@@ -94,8 +95,8 @@ export default function MemberOverviewPage({
 
   if (loading) {
     return (
-      <div className="text-center py-12">
-        <p className="text-gray-600">Loading...</p>
+      <div className="flex justify-center py-12">
+        <Spinner size="lg" />
       </div>
     );
   }

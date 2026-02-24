@@ -10,6 +10,7 @@ import {
   WeeklyTask,
 } from "@/lib/api";
 import { useApp } from "@/components/AppContext";
+import Spinner from "@/components/Spinner";
 import TaskItem from "@/components/TaskItem";
 import TaskForm from "@/components/TaskForm";
 
@@ -94,7 +95,7 @@ export default function WeeklyTasksPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-gray-500">Loading tasks...</div>
+        <Spinner size="lg" />
       </div>
     );
   }

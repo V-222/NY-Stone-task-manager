@@ -30,6 +30,7 @@ async function fetchAPI(endpoint: string, options: RequestInit = {}) {
 export interface TeamMember {
   id: string;
   name: string;
+  role: string;
   color: string;
   createdAt: string;
 }
